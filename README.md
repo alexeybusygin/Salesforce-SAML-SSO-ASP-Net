@@ -5,11 +5,19 @@ This project was originally forked from [Sustainsys SampleOwinApplication](https
 the Salesforce SAML SSO. You will need to configure only 3 variables to make it up and running. The variables are in the 
 /App_Start/Start.Auth.cs, but you can move them to Web.Config or any other suitable location for your project.
 
+```
+private static string SalesforceDomain => "https://xxxxxxxx.my.salesforce.com";
+private static string SalesforceCertificatePath => HostingEnvironment.MapPath("~/App_Data/SFDC.crt");
+private static string ConnectedAppIdentityId => "sample-saml";
+```
+
 ## SalesforceDomain and SalesforceCertificatePath
 
 1. Enable Salesforce as an Identity Provider. Please follow these instructions for domain configuration and Identity Provider setup: https://help.salesforce.com/articleView?id=identity_provider_enable.htm&type=5 
-2. After setup is complete use Issuer value as SalesforceDomain.
-3. Download the certificate with the Download Certificate button and put it in the App_Data. Set SalesforceCertificatePath to point to the certificate file.
+2. After setup is complete use **Issuer** value as `SalesforceDomain`.
+3. Download the certificate via the **Download Certificate** button and put it in the App_Data folder. Set `SalesforceCertificatePath` to point to the certificate file.
+
+![Identity Provider Setup](https://raw.githubusercontent.com/alexeybusygin/Salesforce-SAML-SSO-ASP-Net/master/docs/readme-identity-prodiver-setup.png)
 
 ## ConnectedAppIdentityId
 
@@ -21,8 +29,8 @@ the Salesforce SAML SSO. You will need to configure only 3 variables to make it 
     2. Enter your email address in case Salesforce needs to contact you or your support team.
 3. Configure the connected app Web App settings.
     1. Select Enable SAML.
-    2. For Entity Id, enter `sample-saml` or any other value. User this value for ConnectedAppIdentityId.
-    3. For ACS URL, enter `https://yourdomain/Saml2/Acs`, where `yourdomain` is the application domain.
+    2. For **Entity Id**, enter `sample-saml` or any other value. User this value for `ConnectedAppIdentityId`.
+    3. For **ACS URL**, enter `https://yourdomain/Saml2/Acs`, where `yourdomain` is the application domain.
     4. Select a subject type User ID.
     5. For Name ID Format, keep the default value.
     6. For Issuer, keep the default value.
