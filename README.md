@@ -1,6 +1,30 @@
 # Salesforce-SAML-SSO-ASP-Net
 Sample ASP.Net project for Salesforce SAML2 SSO implementation with Sustainsys.Saml2.Owin
 
-This project was originally forked from https://github.com/Sustainsys/Saml2/tree/master/Samples/SampleOwinApplication and adopted to 
+This project was originally forked from [Sustainsys SampleOwinApplication](https://github.com/Sustainsys/Saml2/tree/master/Samples/SampleOwinApplication) and adopted to 
 the Salesforce SAML SSO. You will need to configure only 3 variables to make it up and running. The variables are in the 
 /App_Start/Start.Auth.cs, but you can move them to Web.Config or any other suitable location for your project.
+
+## SalesforceDomain and SalesforceCertificatePath
+
+1. Enable Salesforce as an Identity Provider. Please follow these instructions for domain configuration and Identity Provider setup: https://help.salesforce.com/articleView?id=identity_provider_enable.htm&type=5 
+2. After setup is complete use Issuer value as SalesforceDomain.
+3. Download the certificate with the Download Certificate button and put it in the App_Data. Set SalesforceCertificatePath to point to the certificate file.
+
+## ConnectedAppIdentityId
+
+1. In Salesforce, create a connected app.
+    1. In Lightning Experience, from Setup, enter App in the Quick Find box, and select App Manager. Click New Connected App.
+    2. In Salesforce Classic, from Setup, enter Apps in the Quick Find box, and select Apps. Under Connected Apps, click New.
+2. Configure the connected app Basic Information settings.
+    1. Enter a name for the connected app (e.g. ASP.Net App). Salesforce uses this name to populate the API Name.
+    2. Enter your email address in case Salesforce needs to contact you or your support team.
+3. Configure the connected app Web App settings.
+    1. Select Enable SAML.
+    2. For Entity Id, enter `sample-saml` or any other value. User this value for ConnectedAppIdentityId.
+    3. For ACS URL, enter `https://yourdomain/Saml2/Acs`, where `yourdomain` is the application domain.
+    4. Select a subject type User ID.
+    5. For Name ID Format, keep the default value.
+    6. For Issuer, keep the default value.
+    7. For IdP Certificate, keep the default (Default IdP Certificate).
+    8. Save the settings.
