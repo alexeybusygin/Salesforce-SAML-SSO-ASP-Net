@@ -20,7 +20,7 @@ namespace SampleOwinApplication
         //
         // Salesforce configuration
 
-        private static string SalesforceDomain => "https://xxxxxxxx.my.salesforce.com";
+        private static string SalesforceIdentityProvider => "https://xxxxxxxx.my.salesforce.com";
         private static string ConnectedAppIdentityId => "sample-saml";
         private static string MetadataUrl => "https://xxxxxxxx.salesforce.com/.well-known/samlidp/yyyyyy.xml";
         private static string SalesforceCertificatePath => HostingEnvironment.MapPath("~/App_Data/SFDC.crt");
@@ -63,7 +63,7 @@ namespace SampleOwinApplication
                 SPOptions = spOptions
             };
 
-            var idp = new IdentityProvider(new EntityId(SalesforceDomain), spOptions)
+            var idp = new IdentityProvider(new EntityId(SalesforceIdentityProvider), spOptions)
                 {
                     AllowUnsolicitedAuthnResponse = true,
                     Binding = Saml2BindingType.HttpRedirect,
