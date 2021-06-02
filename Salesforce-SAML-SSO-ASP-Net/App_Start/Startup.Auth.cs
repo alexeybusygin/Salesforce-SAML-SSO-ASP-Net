@@ -22,6 +22,7 @@ namespace SampleOwinApplication
 
         private static string SalesforceDomain => "https://xxxxxxxx.my.salesforce.com";
         private static string ConnectedAppIdentityId => "sample-saml";
+        private static string MetadataUrl => "https://xxxxxxxx.salesforce.com/.well-known/samlidp/yyyyyy.xml";
         private static string SalesforceCertificatePath => HostingEnvironment.MapPath("~/App_Data/SFDC.crt");
 
 
@@ -66,17 +67,12 @@ namespace SampleOwinApplication
                 {
                     AllowUnsolicitedAuthnResponse = true,
                     Binding = Saml2BindingType.HttpRedirect,
-                    SingleSignOnServiceUrl = new Uri($"{SalesforceDomain}/idp/endpoint/HttpRedirect")
+                    MetadataLocation = MetadataUrl
                 };
 
             idp.SigningKeys.AddConfiguredKey(new X509Certificate2(SalesforceCertificatePath));
 
             Saml2Options.IdentityProviders.Add(idp);
-
-            // It's enough to just create the federation and associate it
-            // with the options. The federation will load the metadata and
-            // update the options with any identity providers found.
-            new Federation($"{SalesforceDomain}/.well-known/samlidp.xml", true, Saml2Options);
 
             return Saml2Options;
         }
@@ -93,9 +89,10 @@ namespace SampleOwinApplication
             var spOptions = new SPOptions
             {
                 EntityId = new EntityId(ConnectedAppIdentityId),
-                Organization = organization
+                Organization = organization,
+                MinIncomingSigningAlgorithm = "http://www.w3.org/2000/09/xmldsig#rsa-sha1",
+                Logger = new SomeLogger()
             };
-            spOptions.MinIncomingSigningAlgorithm = "http://www.w3.org/2000/09/xmldsig#rsa-sha1";
 
             var techContact = new ContactPerson
             {
@@ -131,6 +128,24 @@ namespace SampleOwinApplication
             spOptions.AttributeConsumingServices.Add(attributeConsumingService);
 
             return spOptions;
+        }
+    }
+
+    public class SomeLogger : ILoggerAdapter
+    {
+        public void WriteInformation(string message)
+        {
+            Console.WriteLine(message);
+        }
+
+        public void WriteError(string message, Exception ex)
+        {
+            Console.WriteLine(message);
+        }
+
+        public void WriteVerbose(string message)
+        {
+            Console.WriteLine(message);
         }
     }
 }
